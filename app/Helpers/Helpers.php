@@ -8,8 +8,7 @@ if (!function_exists('pr')) {
      * @return string
      */
     function pr($arr){
-        echo '<pre>';
-        print_r($arr);
+        echo '<pre>';print_r($arr);
         echo '</pre>';
     }
 }
