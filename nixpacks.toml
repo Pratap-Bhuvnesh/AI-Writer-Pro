@@ -7,13 +7,5 @@ nixPkgs = [
   "php82Extensions.mysqlnd"
 ]
 
-[phases.build]
-cmds = [
-  "composer install --no-dev --optimize-autoloader",
-  "php artisan config:clear",
-  "php artisan cache:clear",
-  "php artisan route:clear"
-]
-
 [start]
 cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
