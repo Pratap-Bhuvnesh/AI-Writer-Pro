@@ -51,8 +51,7 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,, Cart $cart)
-{
+    public function update(Request $request, Cart $cart){
     //$item = CartItem::findOrFail($id);
     $item = $cart;
     $inventory = $item->variant->inventory;
