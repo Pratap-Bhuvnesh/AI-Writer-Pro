@@ -7,6 +7,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Artisan;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,4 +43,10 @@ Route::get('/db-test', function () {
     } catch (\Exception $e) {
         return "DB Not Connected ❌";
     }
+});
+
+
+Route::get('/run-seed', function () {
+    Artisan::call('db:seed', ['--force' => true]);
+    return "Seeding Done ✅";
 });
