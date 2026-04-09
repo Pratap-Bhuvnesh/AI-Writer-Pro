@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\CartController;
+use Illuminate\Support\Facades\DB;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,3 +35,11 @@ Route::middleware('auth')->group(function () {
 //Route::resource('products', ProductController::class)->name('allproducts.index');;
 Route::post('/inventory/{variant}/update', [InventoryController::class, 'updateStock']);
 Route::middleware('auth')->get('/cart', [CartController::class, 'getCart']);
+Route::get('/db-test', function () {
+    try {
+        DB::connection()->getPdo();
+        return "DB Connected ✅";
+    } catch (\Exception $e) {
+        return "DB Not Connected ❌";
+    }
+});
