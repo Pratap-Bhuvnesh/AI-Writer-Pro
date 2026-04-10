@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 class AIService
 {
     public function generate($prompt)
-    { dd([
+    { dd([  config('services'),
             'Authorization' => 'Bearer ' .  config('services.groq.api_key'),
             'Content-Type' => 'application/json',
         ]);
