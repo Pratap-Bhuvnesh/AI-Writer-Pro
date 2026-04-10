@@ -8,7 +8,7 @@ class AIService
 {
     public function generate($prompt)
     { dd([
-            'Authorization' => 'Bearer ' . env('GROQ_API_KEY'),
+            'Authorization' => 'Bearer ' .  config('services.groq.api_key'),
             'Content-Type' => 'application/json',
         ]);
         $response = Http::retry(3, 2000) // 3 retry, 2 sec gap
