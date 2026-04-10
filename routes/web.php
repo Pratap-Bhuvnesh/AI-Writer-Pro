@@ -50,3 +50,9 @@ Route::get('/run-seed', function () {
     Artisan::call('db:seed', ['--force' => true]);
     return "Seeding Done ✅";
 });
+Route::get('/clear-config', function () {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:cache');
+    return "Config Cleared";
+});
