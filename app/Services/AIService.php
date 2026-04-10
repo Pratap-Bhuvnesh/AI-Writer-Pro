@@ -7,11 +7,11 @@ use Illuminate\Support\Facades\Http;
 class AIService
 {
     public function generate($prompt)
-    { dd([  config('services'),
+    { /* dd([  config('services'),
             'Authorization' => 'Bearer ' .  config('services.groq.api_key'),
             'Content-Type' => 'application/json',
             env('GROQ_API_KEY')
-        ]);
+        ]); */
         $response = Http::retry(3, 2000) // 3 retry, 2 sec gap
             ->withHeaders([
             'Authorization' => 'Bearer ' . env('GROQ_API_KEY'),
