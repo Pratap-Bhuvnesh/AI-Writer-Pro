@@ -8,6 +8,7 @@ use App\Http\Controllers\AIController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,14 +29,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout-all', [AuthController::class, 'logoutAll']);
     Route::post('/generate', [AIController::class, 'generate']);
     Route::get('/history', [AIController::class, 'history']);
+    Route::post('/placeorder', [OrderController::class, 'placeorder']);
 }); 
 Route::apiResource('products', ProductController::class);
 
 Route::middleware(['auth', 'permission:manage products'])->group(function () {
     Route::apiResource('variants', ProductVariantController::class);
     Route::apiResource('product-images', ProductImageController::class);
-    Route::get('/cart', [CartController::class, 'getCart']);
-    
+    Route::get('/cart', [CartController::class, 'getCart']);    
 });
 
 Route::post('/register', [AuthController::class, 'register']);
