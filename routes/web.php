@@ -16,6 +16,7 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\ChatbotController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -142,4 +143,8 @@ Route::get('/clear-config', function () {
     Artisan::call('cache:clear');
     Artisan::call('config:cache');
     return "Config Cleared";
+});
+Route::post('/chat', [ChatbotController::class, 'chat']);
+Route::get('/chat-ui', function () {
+    return view('chat');
 });
