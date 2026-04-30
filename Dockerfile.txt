@@ -1,5 +1,8 @@
 FROM php:8.2-cli
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Install system dependencies + zip extension
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -8,16 +11,20 @@ RUN apt-get update && apt-get install -y \
     zip \
     && docker-php-ext-install pdo pdo_mysql zip
 
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
+# Copy only composer files first (cache optimization)
 COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Install dependencies WITHOUT dev
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
+# Copy rest of the app
 COPY . .
 
 EXPOSE 8080
 
-CMD php -S 0.0.0.0:8080 -t public 
+CMD php -S 0.0.0.0:8080 -t public
