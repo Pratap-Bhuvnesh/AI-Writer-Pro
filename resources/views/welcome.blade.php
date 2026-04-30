@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>GPT Backed Ecommerce</title>
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=outfit:400,500,600,700&display=swap" rel="stylesheet" />
@@ -383,6 +384,67 @@
                     height: 190px;
                 }
             }
+            /* Toggle Button */
+#chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #007bff;
+    color: white;
+    padding: 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* Chat Box */
+#chat-widget {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    height: 400px;
+    background: white;
+    border: 1px solid #ccc;
+    display: none;
+    flex-direction: column;
+}
+
+/* Header */
+#chat-header {
+    background: #007bff;
+    color: white;
+    padding: 10px;
+}
+
+/* Body */
+#chat-body {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+.user {
+            color: blue; 
+    text-align: right;
+    background: #e1f5fe;
+    padding: 5px;
+    border-radius: 5px;
+}
+.bot {
+    color: green; 
+    text-align: left;
+    background: #e8f5e9;
+    padding: 5px;
+    border-radius: 5px;
+}
+/* Footer */
+#chat-footer {
+    display: flex;
+}
+
+#chat-footer input {
+    flex: 1;
+}
         </style>
     </head>
     <body>
@@ -529,5 +591,78 @@
                 @endif
             </section>
         </main>
+        <!-- Chat Toggle Button -->
+<div id="chat-toggle" onclick="toggleChat()">💬</div>
+
+<!-- Chat Box -->
+<div id="chat-widget">
+    <div id="chat-header">
+        Support
+        <span onclick="toggleChat()" style="float:right;cursor:pointer;">❌</span>
+    </div>
+
+    <div id="chat-body"></div>
+
+    <div id="chat-footer">
+        <input type="text" id="message" placeholder="Type message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+<script type="text/javascript">
+    function toggleChat() {
+    let chat = document.getElementById('chat-widget');
+    chat.style.display = (chat.style.display === 'none' || chat.style.display === '') 
+        ? 'flex' 
+        : 'none';
+}
+
+function sendMessage() {
+    let input = document.getElementById('message');
+    let msg = input.value;
+    if (!msg) return;
+    let typingId = "typing-" + Date.now();
+    let chatBody = document.getElementById('chat-body');
+    
+    // User message
+    let userMsg = document.createElement("p");
+    //userMsg.innerHTML = "<b>You:</b> " + msg;
+    userMsg.innerHTML += `<p class="user"><b>Youu:</b> ${msg}</p>`;
+    chatBody.appendChild(userMsg);
+
+    input.value = "";
+
+    // Typing indicator
+    let typing = document.createElement("p");
+    //typing.innerText = "Typing...";
+    typing.innerHTML += `<p class="bot" id="${typingId}">Typing...</p>`;
+    chatBody.appendChild(typing);
+
+    fetch('/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ message: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+        let reply =  data.data;
+        //typing.innerHTML = "<b>Bot:</b> " + reply;
+        let typingElement = document.getElementById(typingId);
+        if (typingElement) {
+            typingElement.innerHTML = `<p class="bot"><b>Bot:</b> ${reply}</p>`;
+        }
+        //typing.innerHTML += `<p class="bot">${reply}</p>`;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    });
+}
+document.getElementById("message").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        sendMessage();
+    }
+});
+</script>
     </body>
 </html>
+
