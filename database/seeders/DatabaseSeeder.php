@@ -22,6 +22,7 @@ use Database\Seeders\ReviewSeeder;
 use Database\Seeders\CouponSeeder;
 use Database\Seeders\CouponUsageSeeder;
 use Database\Seeders\PaymentSeeder;
+use Database\Seeders\SellerProfileSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -50,6 +51,7 @@ class DatabaseSeeder extends Seeder
             ReviewSeeder::class,
             CouponSeeder::class,
             CouponUsageSeeder::class,            
+            SellerProfileSeeder::class,            
         ]);         
     }
 }
