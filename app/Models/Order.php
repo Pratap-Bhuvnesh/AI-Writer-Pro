@@ -12,7 +12,8 @@ class Order extends Model
         'user_id',       'total_amount',
         'status',        'order_number',       
          'shipping_address', 
-               'payment_status'
+               'payment_status',
+        'payment_method',
     ];
     public function user(){
         return $this->belongsTo(User::class);

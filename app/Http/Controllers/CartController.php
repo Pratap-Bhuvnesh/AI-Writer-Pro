@@ -8,6 +8,22 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+    public function getCart(Request $request)
+    {
+        $cart = Cart::with([
+            'items.variant.product.primaryImage',
+            'items.variant.inventory',
+        ])->firstOrCreate([
+            'user_id' => $request->user()->id,
+        ]);
+
+        if ($request->is('api/*') || $request->wantsJson()) {
+            return response()->json($cart);
+        }
+
+        return view('cart.index', compact('cart'));
+    }
+
     /**
      * Display a listing of the resource.
      */

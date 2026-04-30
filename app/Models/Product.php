@@ -12,11 +12,16 @@ class Product extends Model
         'name',
         'description',
         'category_id',
+        'seller_id',
         'brand'
     ];
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function seller()
+    {
+        return $this->belongsTo(User::class, 'seller_id');
     }
     public function variants()
     {

@@ -23,6 +23,7 @@ class RolePermissionSeeder extends Seeder
         $admin = Role::firstOrCreate(['name' => 'admin']);
         $manager = Role::firstOrCreate(['name' => 'manager']);
         $customer = Role::firstOrCreate(['name' => 'customer']);
+        $seller = Role::firstOrCreate(['name' => 'seller']);
 
         // Assign permissions
         $admin->givePermissionTo(Permission::all());
@@ -33,6 +34,11 @@ class RolePermissionSeeder extends Seeder
         ]);
 
         $customer->givePermissionTo([
+            'view dashboard'
+        ]);
+
+        $seller->givePermissionTo([
+            'manage products',
             'view dashboard'
         ]);
 

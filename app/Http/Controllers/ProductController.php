@@ -14,13 +14,20 @@ class ProductController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request) {
-       // dd($request->is('api/*'));
-         if($request->is('api/*')){
+        if ($request->is('api/*')) {
             return Product::with('category')->get();
-         }else{
-            return Product::with('category')->get();
-         }
-        
+        }
+
+        $products = Product::with([
+            'category',
+            'primaryImage',
+            'variants' => fn ($query) => $query->with('inventory')->orderBy('price'),
+        ])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -113,7 +120,17 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return Product::with('category')->findOrFail($id);
+        $product->load([
+            'category',
+            'images',
+            'variants' => fn ($query) => $query->with('inventory')->orderBy('price'),
+        ]);
+
+        if (request()->is('api/*')) {
+            return $product;
+        }
+
+        return view('products.show', compact('product'));
     }
 
     /**
