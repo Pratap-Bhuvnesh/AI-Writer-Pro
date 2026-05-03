@@ -3,7 +3,8 @@ nixPkgs = [
   "php82",
   "php82Packages.composer",
   "php82Extensions.pdo",
-  "php82Extensions.pdo_mysql"
+  "php82Extensions.pdo_mysql",
+  "php82Extensions.zip"
 ]
 
 [start]
